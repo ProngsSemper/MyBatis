@@ -6,4 +6,9 @@
     <select id="findAll" resultType="com.prongs.domain.User">
         select * from user
     </select>
+
+    <!--保存用户-->
+    <insert id="saveUser" parameterType="com.prongs.domain.User">
+        insert into user (username,address,sex,birthday)values (#{username},#{address},#{sex},#{birthday})
+    </insert>
 </mapper>
