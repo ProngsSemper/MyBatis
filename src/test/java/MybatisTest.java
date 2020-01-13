@@ -1,4 +1,5 @@
 import com.prongs.dao.UserDao;
+import com.prongs.domain.QueryVo;
 import com.prongs.domain.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -37,6 +38,8 @@ public class MybatisTest {
 
     @After//测试方法执行后执行
     public void destroy() throws IOException {
+        //执行提交事务
+        sqlSession.commit();
         sqlSession.close();
         inputStream.close();
     }
@@ -44,16 +47,26 @@ public class MybatisTest {
     @Test
     public void testSave() {
         User user = new User();
-        user.setUsername("saveTest");
+        user.setUsername("last inserted id");
         user.setAddress("广州番禺");
         user.setBirthday(new Date());
         user.setSex("男");
-
+        System.out.println("保存之前id:" + user.getId());
         //执行保存
         userDao.saveUser(user);
+        System.out.println("保存之后id:" + user.getId());
+    }
 
-        //执行提交事务
-        sqlSession.commit();
+    @Test
+    public void testUpdate() {
+        User user = new User();
+        user.setId(41);
+        user.setUsername("saveUpdate");
+        user.setAddress("广州番禺");
+        user.setBirthday(new Date());
+        user.setSex("女");
+        //执行更新
+        userDao.updateUser(user);
 
     }
 
@@ -63,6 +76,41 @@ public class MybatisTest {
         List<User> users = userDao.findAll();
         for (User user : users) {
             System.out.println(user);
+        }
+    }
+
+    @Test
+    public void testDelete() {
+        userDao.deleteUser(41);
+    }
+
+    @Test
+    public void testFindById() {
+        User user = userDao.findUserById(43);
+        System.out.println(user);
+    }
+
+    @Test
+    public void testFindByName() {
+        List<User> users = userDao.findUserByName("王");
+        System.out.println(users);
+    }
+
+    @Test
+    public void testTotal() {
+        System.out.println(userDao.total());
+    }
+
+    @Test
+    public void testFindByVo() {
+        QueryVo vo = new QueryVo();
+        User user = new User();
+        user.setUsername("%王%");
+        vo.setUser(user);
+        List<User> users = userDao.findUserByVo(vo);
+        System.out.println(users);
+        for (User u : users) {
+            System.out.println(u);
         }
     }
 }
