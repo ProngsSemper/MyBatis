@@ -47,24 +47,24 @@ public class MybatisTest {
     @Test
     public void testSave() {
         User user = new User();
-        user.setUsername("last inserted id");
-        user.setAddress("广州番禺");
-        user.setBirthday(new Date());
-        user.setSex("男");
-        System.out.println("保存之前id:" + user.getId());
+        user.setUserName("last inserted id");
+        user.setUserAddress("广州番禺");
+        user.setUserBirthday(new Date());
+        user.setUserSex("女");
+        System.out.println("保存之前id:" + user.getUserId());
         //执行保存
         userDao.saveUser(user);
-        System.out.println("保存之后id:" + user.getId());
+        System.out.println("保存之后id:" + user.getUserId());
     }
 
     @Test
     public void testUpdate() {
         User user = new User();
-        user.setId(41);
-        user.setUsername("saveUpdate");
-        user.setAddress("广州番禺");
-        user.setBirthday(new Date());
-        user.setSex("女");
+        user.setUserId(41);
+        user.setUserName("saveUpdate");
+        user.setUserAddress("广州番禺");
+        user.setUserBirthday(new Date());
+        user.setUserSex("女");
         //执行更新
         userDao.updateUser(user);
 
@@ -105,10 +105,9 @@ public class MybatisTest {
     public void testFindByVo() {
         QueryVo vo = new QueryVo();
         User user = new User();
-        user.setUsername("%王%");
+        user.setUserName("%王%");
         vo.setUser(user);
         List<User> users = userDao.findUserByVo(vo);
-        System.out.println(users);
         for (User u : users) {
             System.out.println(u);
         }
