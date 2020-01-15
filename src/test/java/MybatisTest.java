@@ -71,7 +71,7 @@ public class MybatisTest {
     }
 
     @Test
-    public void testMyBatis() {
+    public void testFindAll() {
         //使用代理对象执行方法
         List<User> users = userDao.findAll();
         for (User user : users) {

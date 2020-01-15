@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.prongs.dao.UserDao">
     <!--配置查询结果列名和实体类属性名的对应关系-->
-    <resultMap id="userMap" type="com.prongs.domain.User">
+    <resultMap id="userMap" type="user">
         <!--主键对应字段-->
         <id property="userId" column="id"></id>
         <!--主键对应字段-->
@@ -19,7 +19,7 @@
     </select>
 
     <!--保存用户-->
-    <insert id="saveUser" parameterType="com.prongs.domain.User">
+    <insert id="saveUser" parameterType="user">
         <!--配置插入后操作，获取新用户id-->
         <selectKey keyProperty="userId" keyColumn="id" resultType="int" order="AFTER">
             select last_insert_id();
@@ -28,7 +28,7 @@
     </insert>
 
     <!--更新用户-->
-    <update id="updateUser" parameterType="com.prongs.domain.User">
+    <update id="updateUser" parameterType="user">
         update  user  set username=#{userName},address=#{userAddress},sex=#{userSex},birthday=#{userBirthday} where id=#{id}
     </update>
 
@@ -53,7 +53,7 @@
     </select>
 
     <!--根据QueryVo查找用户-->
-    <select id="findUserByVo" parameterType="com.prongs.domain.QueryVo" resultMap="userMap">
+    <select id="findUserByVo" parameterType="QueryVo" resultMap="userMap">
         select * from user where username like #{user.userName}
 </select>
 </mapper>
