@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class MybatisTest {
         //创建SqlSessionFactory工厂
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
         SqlSessionFactory factory = builder.build(inputStream);
-        //使用工厂生产SqlSession对象
-        sqlSession = factory.openSession();
+        //使用工厂生产SqlSession对象        ↓自动提交事务
+        sqlSession = factory.openSession(true);
         //使用SqlSession创建Dao接口代理对象
         userDao = sqlSession.getMapper(UserDao.class);
     }
@@ -39,7 +40,7 @@ public class MybatisTest {
     @After//测试方法执行后执行
     public void destroy() throws IOException {
         //执行提交事务
-        sqlSession.commit();
+//        sqlSession.commit();
         sqlSession.close();
         inputStream.close();
     }
@@ -47,7 +48,7 @@ public class MybatisTest {
     @Test
     public void testSave() {
         User user = new User();
-        user.setUserName("last inserted id");
+        user.setUserName("auto");
         user.setUserAddress("广州番禺");
         user.setUserBirthday(new Date());
         user.setUserSex("女");
@@ -108,6 +109,30 @@ public class MybatisTest {
         user.setUserName("%王%");
         vo.setUser(user);
         List<User> users = userDao.findUserByVo(vo);
+        for (User u : users) {
+            System.out.println(u);
+        }
+    }
+
+    @Test
+    public void testFindByCondition() {
+        User user = new User();
+        user.setUserName("老王");
+        List<User> users = userDao.findByCondition(user);
+        for (User u : users) {
+            System.out.println(u);
+        }
+    }
+
+    @Test
+    public void testFindByIds() {
+        QueryVo vo = new QueryVo();
+        List<Integer> list = new ArrayList<Integer>();
+        list.add(42);
+        list.add(43);
+        list.add(45);
+        vo.setIds(list);
+        List<User> users = userDao.findByIds(vo);
         for (User u : users) {
             System.out.println(u);
         }
