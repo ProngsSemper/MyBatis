@@ -1,6 +1,6 @@
-import com.prongs.dao.AccountDao;
-import com.prongs.domain.Account;
-import com.prongs.domain.AccountUser;
+import com.prongs.dao.RoleDao;
+import com.prongs.dao.UserDao;
+import com.prongs.domain.Role;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,10 +17,10 @@ import java.util.List;
  * @author Prongs
  * @date 2019/11/26 23:09
  */
-public class AccountTest {
+public class RoleTest {
     private InputStream inputStream;
     private SqlSession sqlSession;
-    private AccountDao accountDao;
+    private RoleDao roleDao;
 
     @Before//测试方法执行前执行
     public void init() throws Exception {
@@ -32,7 +32,7 @@ public class AccountTest {
         //使用工厂生产SqlSession对象        ↓自动提交事务
         sqlSession = factory.openSession(true);
         //使用SqlSession创建Dao接口代理对象
-        accountDao = sqlSession.getMapper(AccountDao.class);
+        roleDao = sqlSession.getMapper(RoleDao.class);
     }
 
     @After//测试方法执行后执行
@@ -44,20 +44,13 @@ public class AccountTest {
     }
 
     @Test
-    public void findAll() {
-        List<Account> list = accountDao.findAll();
-        for (Account account : list) {
-            System.out.println(account);
-            System.out.println(account.getUser());
+    public void findAll(){
+        List<Role> roles = roleDao.findAll();
+        for (Role role : roles){
+            System.out.println(role);
+            System.out.println(role.getUsers());
         }
     }
-
-    @Test
-    public void findAllAccount() {
-        List<AccountUser> list = accountDao.findAllAccount();
-        for (AccountUser account : list) {
-            System.out.println(account);
-        }
-    }
+    
 
 }

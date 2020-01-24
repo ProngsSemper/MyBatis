@@ -1,7 +1,4 @@
-import com.prongs.dao.AccountDao;
 import com.prongs.dao.UserDao;
-import com.prongs.domain.Account;
-import com.prongs.domain.AccountUser;
 import com.prongs.domain.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -50,9 +47,8 @@ public class UserTest {
         List<User> users = userDao.findAll();
         for (User user : users){
             System.out.println(user);
-            System.out.println(user.getAccounts());
+            System.out.println(user.getRoles());
         }
     }
-
 
 }
