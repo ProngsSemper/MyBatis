@@ -2,87 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.prongs.dao.UserDao">
-    <!--配置查询结果列名和实体类属性名的对应关系-->
-    <resultMap id="userMap" type="user">
-        <!--主键对应字段-->
-        <id property="userId" column="id"></id>
-        <!--主键对应字段-->
-        <result property="userName" column="username"></result>
-        <result property="userAddress" column="address"></result>
-        <result property="userSex" column="sex"></result>
-        <result property="userBirthday" column="birthday"></result>
+
+    <resultMap id="AccountUserMap" type="user">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="address" column="address"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <collection property="accounts" ofType="account">
+            <id property="id" column="id"></id>
+            <result property="uid" column="uid"></result>
+            <result property="money" column="money"></result>
+        </collection>
     </resultMap>
 
-    <!--提高sql语句复用率-->
-    <sql id="default">
-        select * from user
-    </sql>
-
     <!--配置查询所有-->
-    <select id="findAll" resultMap="userMap">
-        <include refid="default"></include>
+    <select id="findAll" resultMap="AccountUserMap">
+        select * from user u left outer join account a on u.id=a.uid
     </select>
 
-    <!--保存用户-->
-    <insert id="saveUser" parameterType="user">
-        <!--配置插入后操作，获取新用户id-->
-        <selectKey keyProperty="userId" keyColumn="id" resultType="int" order="AFTER">
-            select last_insert_id();
-        </selectKey>
-        insert into user (username,address,sex,birthday)values (#{userName},#{userAddress},#{userSex},#{userBirthday})
-    </insert>
-
-    <!--更新用户-->
-    <update id="updateUser" parameterType="user">
-        update  user  set username=#{userName},address=#{userAddress},sex=#{userSex},birthday=#{userBirthday} where id=#{id}
-    </update>
-
-    <!--删除用户-->
-    <delete id="deleteUser" parameterType="java.lang.Integer">
-        delete from user where id=#{uid}
-    </delete>
-
     <!--根据id查找用户-->
-    <select id="findUserById" parameterType="java.lang.Integer" resultMap="userMap">
+    <select id="findUserById" parameterType="java.lang.Integer" resultType="user">
         select * from user where id=#{uid}
     </select>
 
-    <!--根据name查找用户-->
-    <select id="findUserByName" parameterType="java.lang.String" resultMap="userMap">
-        select * from user where username like '%${value}%'
-    </select>
-
-    <!--查询总用户数-->
-    <select id="total" resultType="java.lang.Integer">
-        select count(id) from user
-    </select>
-
-    <!--根据QueryVo查找用户-->
-    <select id="findUserByVo" parameterType="QueryVo" resultMap="userMap">
-        <include refid="default"></include>
-         where username like #{user.userName}
-    </select>
-
-    <select id="findByCondition" parameterType="user" resultMap="userMap">
-        <include refid="default"></include>
-    <where>
-        <if test="userName != null">
-            and username = #{userName}
-        </if>
-        <if test="userSex != null">
-            and usersex = #{userSex}
-        </if>
-    </where>
-</select>
-
-    <select id="findByIds" parameterType="queryvo" resultMap="userMap">
-        <include refid="default"></include>
-        <where>
-            <if test="ids != null and ids.size()>0">
-                <foreach collection="ids" open="and id in (" close=")" item="uid" separator=",">
-                    #{uid}
-                </foreach>
-            </if>
-        </where>
-    </select>
 </mapper>
