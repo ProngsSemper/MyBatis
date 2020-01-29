@@ -1,6 +1,5 @@
-import com.prongs.dao.RoleDao;
 import com.prongs.dao.UserDao;
-import com.prongs.domain.Role;
+import com.prongs.domain.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,10 +16,11 @@ import java.util.List;
  * @author Prongs
  * @date 2019/11/26 23:09
  */
-public class RoleTest {
+public class SecondLevelCacheTest {
     private InputStream inputStream;
     private SqlSession sqlSession;
-    private RoleDao roleDao;
+    private UserDao userDao;
+    private SqlSessionFactory factory;
 
     @Before//测试方法执行前执行
     public void init() throws Exception {
@@ -28,11 +28,11 @@ public class RoleTest {
         inputStream = Resources.getResourceAsStream("SqlMapConfig.xml");
         //创建SqlSessionFactory工厂
         SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-        SqlSessionFactory factory = builder.build(inputStream);
+        factory = builder.build(inputStream);
         //使用工厂生产SqlSession对象        ↓自动提交事务
         sqlSession = factory.openSession(true);
         //使用SqlSession创建Dao接口代理对象
-        roleDao = sqlSession.getMapper(RoleDao.class);
+        userDao = sqlSession.getMapper(UserDao.class);
     }
 
     @After//测试方法执行后执行
@@ -44,13 +44,19 @@ public class RoleTest {
     }
 
     @Test
-    public void findAll(){
-        List<Role> roles = roleDao.findAll();
-        for (Role role : roles){
-            System.out.println(role);
-            System.out.println(role.getUsers());
-        }
+    public void findOne() {
+        SqlSession session = factory.openSession();
+        UserDao userDao1 = session.getMapper(UserDao.class);
+        User user = userDao1.findUserById(41);
+        System.out.println(user);
+        //释放一级缓存
+        session.close();
+        //再次打开session
+        SqlSession sqlSession1 = factory.openSession();
+        UserDao userDao2 = sqlSession1.getMapper(UserDao.class);
+        User user1 = userDao2.findUserById(41);
+        System.out.println(user1);
+
     }
-    
 
 }

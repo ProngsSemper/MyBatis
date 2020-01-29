@@ -1,5 +1,5 @@
-import com.prongs.dao.UserDao;
-import com.prongs.domain.User;
+import com.prongs.dao.AccountDao;
+import com.prongs.domain.Account;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,10 +16,10 @@ import java.util.List;
  * @author Prongs
  * @date 2019/11/26 23:09
  */
-public class UserTest {
+public class AccountTest {
     private InputStream inputStream;
     private SqlSession sqlSession;
-    private UserDao userDao;
+    private AccountDao accountDao;
 
     @Before//测试方法执行前执行
     public void init() throws Exception {
@@ -31,7 +31,7 @@ public class UserTest {
         //使用工厂生产SqlSession对象        ↓自动提交事务
         sqlSession = factory.openSession(true);
         //使用SqlSession创建Dao接口代理对象
-        userDao = sqlSession.getMapper(UserDao.class);
+        accountDao = sqlSession.getMapper(AccountDao.class);
     }
 
     @After//测试方法执行后执行
@@ -43,13 +43,14 @@ public class UserTest {
     }
 
     @Test
-    public void findAll(){
-        List<User> users =  userDao.findAll();
-        for (User user : users){
-            System.out.println("------------------");
-            System.out.println(user);
-            System.out.println(user.getAccounts());
+    public void findAll() {
+        List<Account> list = accountDao.findAll();
+        for (Account account : list) {
+            System.out.println(account);
+            System.out.println(account.getUser());
         }
     }
+
+
 
 }

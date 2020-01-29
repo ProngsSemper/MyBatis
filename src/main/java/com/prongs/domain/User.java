@@ -9,69 +9,70 @@ import java.util.List;
  * @date 2019/11/26 22:39
  */
 public class User implements Serializable {
-    private Integer id;
-    private String username;
-    private Date birthday;
-    private String sex;
-    private String address;
-    private List<Role> roles;
+    private Integer userId;
+    private String userName;
+    private Date userBirthday;
+    private String userSex;
+    private String userAddress;
+    private List<Account> accounts;
 
-    public List<Role> getRoles() {
-        return roles;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getUsername() {
-        return username;
+    public Date getUserBirthday() {
+        return userBirthday;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserBirthday(Date userBirthday) {
+        this.userBirthday = userBirthday;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public String getUserSex() {
+        return userSex;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setUserSex(String userSex) {
+        this.userSex = userSex;
     }
 
-    public String getSex() {
-        return sex;
+    public String getUserAddress() {
+        return userAddress;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
-    public String getAddress() {
-        return address;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + username + '\'' +
-                ", birthday=" + birthday +
-                ", sex='" + sex + '\'' +
-                ", address='" + address + '\'' +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userBirthday=" + userBirthday +
+                ", userSex='" + userSex + '\'' +
+                ", userAddress='" + userAddress + '\'' +
+                ", accounts=" + accounts +
                 '}';
     }
 }
